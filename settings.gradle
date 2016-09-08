@@ -1,0 +1,27 @@
+rootProject.name = "oneiroi"
+
+/**
+ * Creates the project structure for gradle.
+ * Fix to put sub projects into a directory
+ */
+
+def projectMap = [
+        "oneiroi-api" : "",
+        "oneiroi-backend" : "",
+        "oneiroi-frontend" : ""
+]
+
+projectMap.keySet().each {
+    include it as String
+}
+
+rootProject.children.each {
+    String projectName = it.name.replaceAll("\\p{Upper}") {
+        it.toLowerCase()
+    }
+    def path = projectMap[projectName] ?: ""
+    it.projectDir = new File(settingsDir, "$path/$projectName")
+    it.setBuildFileName("build.gradle")
+}
+rootProject.name = 'oneiroi'
+
