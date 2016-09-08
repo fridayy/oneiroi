@@ -6,7 +6,7 @@ Tech:
         Webpack - js bundler
         mocha - testing framework
         ESlint - linter for compile time checking
-        Semantic - for fancy UI stuff
+        Bootstrap - for fancy UI stuff
 
     Backend:
         Spring Boot
