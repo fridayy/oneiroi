@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
-import Navigation from '../navigation/Navigation'
+import {PageHeader} from 'react-bootstrap';
 /**
  * Stateless Header component
  * const indicates stateless components.
@@ -8,15 +8,14 @@ import Navigation from '../navigation/Navigation'
 class Header extends Component {
     render() {
         return (
-            <div className="App-header">
+            <PageHeader>
                 <FontAwesome
                     name="circle-o-notch"
                     size="4x"
                     spin
                 />
-                <h2>oneiroi react application</h2>
-                <Navigation/>
-            </div>
+                <h2>ONEIROI</h2>
+            </PageHeader>
         );
     }
 }

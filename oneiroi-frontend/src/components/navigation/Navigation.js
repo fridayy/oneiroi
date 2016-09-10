@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import './navigation.css';
 
 const Navigation = () => {
     return (
@@ -11,7 +12,7 @@ const Navigation = () => {
                 <MenuItem eventKey="4.1">Action</MenuItem>
                 <MenuItem eventKey="4.2">Another action</MenuItem>
                 <MenuItem eventKey="4.3">Something else here</MenuItem>
-                <MenuItem divider />
+                <MenuItem divider/>
                 <MenuItem eventKey="4.4">Separated link</MenuItem>
             </NavDropdown>
         </Nav>
