@@ -3,7 +3,7 @@ import './App.css';
 import {Row, Col, Grid} from 'react-bootstrap';
 import Header from './components/header/Header';
 import Navigation from './components/navigation/Navigation';
-import TestButton from './components/testButton/TestButton';
+
 /**
  * This class is rendered everytime and serves as the application layout
  * Created by bnjm on 9/8/16.
@@ -22,7 +22,6 @@ class App extends Component {
                         <Col xsHidden md={4}></Col>
                     </Row>
                 </Grid>
-                <TestButton/> //TODO: remove this
             </div>
         );
     }

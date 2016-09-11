@@ -6,7 +6,6 @@ rootProject.name = "oneiroi"
  */
 
 def projectMap = [
-        "oneiroi-api" : "",
         "oneiroi-backend" : "",
         "oneiroi-frontend" : ""
 ]
@@ -23,5 +22,3 @@ rootProject.children.each {
     it.projectDir = new File(settingsDir, "$path/$projectName")
     it.setBuildFileName("build.gradle")
 }
-rootProject.name = 'oneiroi'
-

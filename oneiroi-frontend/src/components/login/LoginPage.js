@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react';
 import LoginForm from './LoginForm';
+import SHA256 from 'crypto-js/sha256';
 
 class LoginPage extends Component {
     constructor() {
@@ -26,7 +27,8 @@ class LoginPage extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        alert(JSON.stringify(this.state.user));
+        alert(JSON.stringify(
+            "username: " + this.state.user.username + " password: " + SHA256(this.state.user.password)));
     }
 
     render() {

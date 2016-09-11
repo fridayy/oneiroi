@@ -14,7 +14,7 @@ class TextInputValidation extends Component {
                 <FormGroup>
                     <ControlLabel>{this.props.label}</ControlLabel>
                     <FormControl
-                        type="text"
+                        type={this.props.type}
                         name={this.props.name}
                         value={this.props.value}
                         placeholder={this.props.placeholder}
