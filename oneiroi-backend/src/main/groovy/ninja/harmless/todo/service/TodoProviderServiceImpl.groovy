@@ -2,6 +2,7 @@ package ninja.harmless.todo.service
 
 import ninja.harmless.todo.TodoProviderService
 import ninja.harmless.todo.model.Todo
+import ninja.harmless.todo.model.TodoStats
 import ninja.harmless.todo.repository.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -17,6 +18,20 @@ class TodoProviderServiceImpl implements TodoProviderService {
     @Autowired
     TodoProviderServiceImpl(TodoRepository repository) {
         this.repository = repository
+    }
+
+    @Override
+    TodoStats provideStatistics() {
+        int totalCount = provideAll().size()
+        int markedDone = repository.countMarkedDone()
+        double percentageDone = 0d
+        if(totalCount > 0) {
+            percentageDone = (markedDone / totalCount) * 100
+        }
+        TodoStats stats = new TodoStats(totalTodos: totalCount,
+                markedDone: markedDone,
+                percentageDone: percentageDone)
+        return stats
     }
 
     @Override

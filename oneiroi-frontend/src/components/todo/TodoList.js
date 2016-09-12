@@ -2,41 +2,37 @@
  * Created by bnjm on 9/11/16.
  */
 import React, {Component} from 'react';
-import TodoAddModal from './TodoAddModal';
+import {Table} from 'react-bootstrap';
+import TodoItem from './TodoItem';
+import './Todo.css';
 
 class TodoList extends Component {
 
     render() {
         var createTodoEntryRow = function (todo) {
-            var status = "Not Done";
-            if (todo.isDone) {
-                status = "Done";
-            }
-
             return (
-                <tr key={todo.id}>
-                    <td>{todo.title}</td>
-                    <td>{todo.description}</td>
-                    <td>{status}</td>
-                </tr>
+                <TodoItem
+                    todo={todo}
+                    onDelete={this.props.onDelete}
+                    onUpdate={this.props.onUpdate}
+                />
             )
-        }
+        };
 
         return (
             <div>
-                <table className="table">
+                <Table hover condensed striped>
                     <thead>
                     <th>Title</th>
+                    <th>Description</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                     </thead>
                     <tbody>
-                        {this.props.todos.map(createTodoEntryRow, this)}
+                    {this.props.todos.map(createTodoEntryRow, this)}
                     </tbody>
-                </table>
-                <TodoAddModal
-                    todo={this.props.todo}
-                    onChange={this.props.onChange}
-                    onClick={this.props.onClick}
-                />
+                </Table>
             </div>
         )
     }

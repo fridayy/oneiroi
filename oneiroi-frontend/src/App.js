@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import './App.css';
-import {Row, Col, Grid} from 'react-bootstrap';
 import Header from './components/header/Header';
 import Navigation from './components/navigation/Navigation';
 
@@ -14,14 +13,7 @@ class App extends Component {
             <div className="App">
                 <Header/>
                 <Navigation/>
-                <Grid>
-                    <Row className="show-grid">
-                        <Col xs={6} md={4}></Col>
-                        <Col xs={6} md={4}>
-                            {this.props.children}</Col>
-                        <Col xsHidden md={4}></Col>
-                    </Row>
-                </Grid>
+                {this.props.children}
             </div>
         );
     }

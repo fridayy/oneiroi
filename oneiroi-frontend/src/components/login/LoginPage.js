@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import LoginForm from './LoginForm';
 import SHA256 from 'crypto-js/sha256';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 class LoginPage extends Component {
     constructor() {
@@ -27,18 +28,24 @@ class LoginPage extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        alert(JSON.stringify(
+        console.log(JSON.stringify(
             "username: " + this.state.user.username + " password: " + SHA256(this.state.user.password)));
     }
 
     render() {
         return (
-            <LoginForm
-                user={this.state.user}
-                onChange={this.setUserState}
-                onClick={this.handleSubmit}
-            />
-        );
+            <Grid>
+                <Row className="show-grid">
+                    <Col xs={6} md={4}></Col>
+                    <Col xs={6} md={4}>
+                        <LoginForm
+                            user={this.state.user}
+                            onChange={this.setUserState}
+                            onClick={this.handleSubmit}/>
+                    </Col>
+                    <Col xsHidden md={4}></Col>
+                </Row>
+            </Grid>);
     }
 }
 
