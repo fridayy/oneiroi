@@ -33,8 +33,8 @@ class TodoRestController {
      */
     @RequestMapping(path = "/todos", method = RequestMethod.GET)
     @VerifyJWT
-    Collection<Todo> todoEntries(@RequestHeader("Authorization") String token) {
-        return todoProviderService.provideAll()
+    ResponseEntity<Collection<Todo>> todoEntries(@RequestHeader("Authorization") String token) {
+        return new ResponseEntity<Collection<Todo>>(todoProviderService.provideAll(), HttpStatus.OK)
     }
 
     @RequestMapping(path = "/todo", method = RequestMethod.POST)
@@ -46,8 +46,8 @@ class TodoRestController {
 
     @RequestMapping(path = "/todo/{id}", method = RequestMethod.GET)
     @VerifyJWT
-    Todo findOne(@RequestHeader("Authorization") String token, @PathVariable String id) {
-        return repository.findOne(id)
+    ResponseEntity<Todo> findOne(@RequestHeader("Authorization") String token, @PathVariable String id) {
+        return new ResponseEntity<Todo>(repository.findOne(id), HttpStatus.OK)
     }
 
     @RequestMapping(path = "/todo", method = RequestMethod.PUT)
@@ -66,8 +66,8 @@ class TodoRestController {
 
     @RequestMapping(path = "/todos/stats", method = RequestMethod.GET)
     @VerifyJWT
-    TodoStats getStatistics(@RequestHeader("Authorization") String token) {
-        return todoProviderService.provideStatistics()
+    ResponseEntity<TodoStats> getStatistics(@RequestHeader("Authorization") String token) {
+        return new ResponseEntity<TodoStats>(todoProviderService.provideStatistics(), HttpStatus.OK)
     }
 
     @RequestMapping(path = "/todos/test")

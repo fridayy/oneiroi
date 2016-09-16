@@ -24,12 +24,14 @@ class TodoProviderServiceImpl implements TodoProviderService {
     TodoStats provideStatistics() {
         int totalCount = provideAll().size()
         int markedDone = repository.countMarkedDone()
+        int open = totalCount - markedDone
         double percentageDone = 0d
         if(totalCount > 0) {
             percentageDone = (markedDone / totalCount) * 100
         }
         TodoStats stats = new TodoStats(totalTodos: totalCount,
                 markedDone: markedDone,
+                open: open,
                 percentageDone: percentageDone)
         return stats
     }

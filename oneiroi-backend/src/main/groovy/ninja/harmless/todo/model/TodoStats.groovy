@@ -6,5 +6,6 @@ package ninja.harmless.todo.model
 class TodoStats {
     int totalTodos
     int markedDone
+    int open
     double percentageDone
 }

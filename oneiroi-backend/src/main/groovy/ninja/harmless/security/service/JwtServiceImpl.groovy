@@ -1,15 +1,13 @@
 package ninja.harmless.security.service
 
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.MalformedJwtException
-import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.SignatureException
+import io.jsonwebtoken.*
 import ninja.harmless.security.JwtService
 import ninja.harmless.security.model.JwtToken
 import ninja.harmless.user.model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+
 /**
  * @author bnjm@harmless.ninja - 9/14/16.
  */
@@ -31,9 +29,9 @@ class JwtServiceImpl implements JwtService {
         publicClaims.putAll(user?.privileges?.rights)
 
         String compactJwt = Jwts.builder()
-                .setSubject(user.basic.username)
-                .setExpiration(new Date(System.currentTimeMillis() + 36000))
                 .setClaims(publicClaims)
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .setSubject(user.basic.username)
                 .signWith(SignatureAlgorithm.HS256, secret.bytes.encodeBase64().toString())
                 .compact()
 
@@ -47,7 +45,7 @@ class JwtServiceImpl implements JwtService {
     boolean verifyJWT(JwtToken token) {
         try {
             Jwts.parser().setSigningKey(secret.bytes.encodeBase64().toString()).parseClaimsJws(token.toString())
-        } catch(SignatureException | MalformedJwtException e) {
+        } catch(SignatureException | MalformedJwtException | ExpiredJwtException e) {
             println(e.message)
             return false
         }
@@ -58,7 +56,7 @@ class JwtServiceImpl implements JwtService {
     boolean verifyJWT(String token) {
         try {
             Jwts.parser().setSigningKey(secret.bytes.encodeBase64().toString()).parseClaimsJws(token)
-        } catch (SignatureException | MalformedJwtException e) {
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException e) {
             println(e.message)
             return false
         }

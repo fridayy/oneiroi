@@ -4,10 +4,11 @@
 import React, {Component} from 'react';
 import TodoList from './TodoList';
 import TodoAddModal from './TodoAddModal';
-import TodoProgressBar from './TodoProgressBar';
-import {Grid, Row, Col, Panel, Label} from 'react-bootstrap';
+import TodoStatistic from './TodoStatistic';
+import {Grid, Row, Col, Panel} from 'react-bootstrap';
 import CloseableAlert from '../common/CloseableAlert';
 import './Todo.css';
+import {browserHistory} from 'react-router'
 
 class TodoPage extends Component {
     constructor(props) {
@@ -23,9 +24,11 @@ class TodoPage extends Component {
             todoStats: {
                 totalTodos: '',
                 markedDone: '',
+                open: '',
                 percentageDone: ''
             },
-            added: false
+            added: false,
+            alert: false
         };
         this.setTodoState = this.setTodoState.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,7 +50,7 @@ class TodoPage extends Component {
     handleSubmit(e) {
         e.preventDefault();
         var todosBeforeAdd = this.state.todos;
-        fetch("http://localhost:8080/api/v1/todo", {
+        fetch("/api/v1/todo", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -55,42 +58,45 @@ class TodoPage extends Component {
                 'Authorization' : 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(this.state.todo)
-        }).then(response => response.json())
+        }).then(this.handleErrors)
+            .then(response => response.json())
             .then(data => {
                 todosBeforeAdd.push(data);
                 this.setState({todos: todosBeforeAdd});
                 this.setState({added: true});
+                this.queryStatisticsFromApi();
             })
-            .catch(err => console.error(err.toString()));
+            .catch(err => this.setState({alert : true}));
     }
 
     queryTodosFromApi() {
-        fetch("http://localhost:8080/api/v1/todos", {
+        fetch("/api/v1/todos", {
             method: 'GET',
             headers: {
                 'Authorization' : 'Bearer ' + localStorage.getItem("token")
             }
-        })
+        }).then(this.handleErrors)
             .then(response => response.json())
             .then(data => this.setState({todos: data}))
-            .catch(err => console.error(err.toString()));
+            .catch(err => this.redirect());
     }
 
     deleteEntry(id) {
-        fetch("http://localhost:8080/api/v1/todo/" + id, {
+        fetch("/api/v1/todo/" + id, {
             method: 'DELETE',
             headers: {
                 'Authorization' : 'Bearer ' + localStorage.getItem("token")
             }
-        }).then(response => {
+        }).then(this.handleErrors)
+            .then(response => {
             this.queryTodosFromApi();
             this.queryStatisticsFromApi();
-        }).catch(err => console.error(err.toString()));
+        }).catch(err => this.redirect());
     }
 
     updateEntryStatus(todo) {
         todo.isDone = !todo.isDone;
-        fetch("http://localhost:8080/api/v1/todo/", {
+        fetch("/api/v1/todo/", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -98,24 +104,37 @@ class TodoPage extends Component {
                 'Authorization' : 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(todo)
-        }).then(response => {
+        }).then(this.handleErrors)
+            .then(response => {
             this.queryTodosFromApi();
             this.queryStatisticsFromApi();
-        }).catch(err => console.error(err.toString()));
+        }).catch(err => this.redirect());
     }
 
     queryStatisticsFromApi() {
-        fetch("http://localhost:8080/api/v1/todos/stats", {
+        fetch("/api/v1/todos/stats", {
             headers: {
                 'Authorization' : 'Bearer ' + localStorage.getItem("token")
             }
         })
+            .then(this.handleErrors)
             .then(response => response.json())
             .then(data => this.setState({todoStats: data}))
-            .catch(err => console.error(err.toString()));
+            .catch(err => this.redirect());
     }
 
-    componentDidMount() {
+    handleErrors(response) {
+        if (!response.ok) {
+            throw new Error("error!")
+        }
+        return response
+    }
+
+    redirect() {
+        browserHistory.push('/login')
+    }
+
+    componentWillMount() {
         this.queryTodosFromApi();
         this.queryStatisticsFromApi();
     }
@@ -130,6 +149,10 @@ class TodoPage extends Component {
                                         alertType="success"
                                         title="Successfully Added!"
                                         text="You successfully added an item!"/>
+                        <CloseableAlert visible={this.state.alert}
+                                        alertType="danger"
+                                        title="Could not add Todo!"
+                                        text="Sorry :("/>
                         <h4>Tasks</h4>
                         <Panel>
                             <TodoList
@@ -141,12 +164,9 @@ class TodoPage extends Component {
                         </Panel>
                     </Col>
                     <Col className="todoStats" xs={6} md={4}>
-                        <h4>Statistics</h4>
-                        <Panel>
-                            <p>Open: <Label bsStyle="danger">{this.state.todoStats.totalTodos}</Label></p>
-                            <p>Closed: <Label bsStyle="success">{this.state.todoStats.markedDone}</Label></p>
-                            <p>Progress:</p><TodoProgressBar todoStats={this.state.todoStats}/>
-                        </Panel>
+                        <TodoStatistic
+                            todoStats={this.state.todoStats}
+                        />
                         <TodoAddModal
                             todo={this.state.todo}
                             onChange={this.setTodoState}

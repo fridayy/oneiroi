@@ -44,7 +44,7 @@ class LoginPage extends Component {
     }
 
     sendLoginRequest() {
-        fetch("http://localhost:8080/api/v1/user/login", {
+        fetch("/api/v1/user/login", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

@@ -33,7 +33,6 @@ class TodoAddModal extends Component {
                         <Modal.Title>Add Task</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <h4>Test</h4>
                         <TodoAddForm
                             todo={this.props.todo}
                             onChange={this.props.onChange}
