@@ -1,4 +1,6 @@
 {
-  "username" : "bnjm",
-  "password" : "a32bf8d0ff2aaad24d5dd83942a6d9ed40cbde0ec94353b92bd18ecc3569f685"
+  "basic" : {
+    "username" : "bnjm",
+    "password" : "fd7adb152c05ef80dccf50a1fa4c05d5a3ec6da95575fc312ae7c5d091836351"
+  }
 }

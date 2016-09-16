@@ -51,7 +51,8 @@ class TodoPage extends Component {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(this.state.todo)
         }).then(response => response.json())
@@ -64,7 +65,12 @@ class TodoPage extends Component {
     }
 
     queryTodosFromApi() {
-        fetch("http://localhost:8080/api/v1/todos")
+        fetch("http://localhost:8080/api/v1/todos", {
+            method: 'GET',
+            headers: {
+                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+            }
+        })
             .then(response => response.json())
             .then(data => this.setState({todos: data}))
             .catch(err => console.error(err.toString()));
@@ -72,7 +78,10 @@ class TodoPage extends Component {
 
     deleteEntry(id) {
         fetch("http://localhost:8080/api/v1/todo/" + id, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+            }
         }).then(response => {
             this.queryTodosFromApi();
             this.queryStatisticsFromApi();
@@ -85,7 +94,8 @@ class TodoPage extends Component {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(todo)
         }).then(response => {
@@ -95,7 +105,11 @@ class TodoPage extends Component {
     }
 
     queryStatisticsFromApi() {
-        fetch("http://localhost:8080/api/v1/todos/stats")
+        fetch("http://localhost:8080/api/v1/todos/stats", {
+            headers: {
+                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+            }
+        })
             .then(response => response.json())
             .then(data => this.setState({todoStats: data}))
             .catch(err => console.error(err.toString()));

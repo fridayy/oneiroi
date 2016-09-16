@@ -1,16 +1,22 @@
 buildscript {
 	ext {
 		springBootVersion = '1.4.0.RELEASE'
+		aspectjVersion = '1.8.4'
 	}
 	repositories {
 		mavenCentral()
+        maven {
+            url "https://maven.eveoh.nl/content/repositories/releases"
+        }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("nl.eveoh:gradle-aspectj:1.6")
 	}
 }
 
 apply plugin: 'groovy'
+apply plugin: 'aspectj'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 

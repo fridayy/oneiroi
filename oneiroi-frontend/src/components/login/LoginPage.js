@@ -5,12 +5,17 @@ import React, {Component} from 'react';
 import LoginForm from './LoginForm';
 import SHA256 from 'crypto-js/sha256';
 import {Grid, Row, Col} from 'react-bootstrap';
+import {browserHistory} from 'react-router'
+import CloseableAlert from '../common/CloseableAlert';
 
 class LoginPage extends Component {
     constructor() {
         super();
         this.state = {
-            user: {username: '', password: ''}
+            user: {
+                basic: {username: '', password: ''}
+            },
+            alert: false
         };
         this.setUserState = this.setUserState.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,8 +24,12 @@ class LoginPage extends Component {
     setUserState(e) {
         var field = e.target.name;
         var val = e.target.value;
-        var items = this.state.user;
-        items[field] = val;
+        var items = this.state.user.basic;
+        if (field === "password") {
+            items[field] = SHA256(val).toString();
+        } else {
+            items[field] = val;
+        }
         this.setState({user: items});
 
         return this.setState({user: this.state.user})
@@ -29,7 +38,37 @@ class LoginPage extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log(JSON.stringify(
-            "username: " + this.state.user.username + " password: " + SHA256(this.state.user.password)));
+            "username: " + this.state.user.basic.username +
+            " password: " + SHA256(this.state.user.basic.password)));
+        this.sendLoginRequest()
+    }
+
+    sendLoginRequest() {
+        fetch("http://localhost:8080/api/v1/user/login", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.user)
+        }).then(this.handleErrors)
+            .then(response => response.json())
+            .then(data => {
+                this.addAuthToken(data);
+            })
+            .catch(err => this.setState({alert: true}));
+    }
+
+    handleErrors(response) {
+        if (!response.ok) {
+            throw new Error("error!")
+        }
+        return response
+    }
+
+    addAuthToken(data) {
+        localStorage.setItem("token", data.header + "." + data.payload + "." + data.signature);
+        browserHistory.push('/todos');
     }
 
     render() {
@@ -38,6 +77,10 @@ class LoginPage extends Component {
                 <Row className="show-grid">
                     <Col xs={6} md={4}></Col>
                     <Col xs={6} md={4}>
+                        <CloseableAlert visible={this.state.alert}
+                                        alertType="danger"
+                                        title="Ooops"
+                                        text="Wrong credentials..."/>
                         <LoginForm
                             user={this.state.user}
                             onChange={this.setUserState}

@@ -1,6 +1,6 @@
 package ninja.harmless.todo.controller
 
-import groovy.transform.TypeChecked
+import ninja.harmless.aspect.jwt.VerifyJWT
 import ninja.harmless.todo.TodoProviderService
 import ninja.harmless.todo.model.Todo
 import ninja.harmless.todo.model.TodoStats
@@ -8,18 +8,13 @@ import ninja.harmless.todo.repository.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 /**
  * @author bnjm@harmless.ninja - 9/11/16.
  */
 @RestController
 @RequestMapping(value = "api/v1/")
-@TypeChecked
+@CrossOrigin(origins = "http://localhost:3000")
 class TodoRestController {
 
     TodoProviderService todoProviderService
@@ -36,42 +31,48 @@ class TodoRestController {
      * Cross Origin enabled to ensure the front-end can send ajax requests.
      * @return
      */
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/todos", method = RequestMethod.GET)
-    Collection<Todo> todoEntries() {
+    @VerifyJWT
+    Collection<Todo> todoEntries(@RequestHeader("Authorization") String token) {
         return todoProviderService.provideAll()
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/todo", method = RequestMethod.POST)
-    ResponseEntity<Todo> createEntry(@RequestBody Todo entry) {
+    @VerifyJWT
+    ResponseEntity<Todo> createEntry(@RequestHeader("Authorization") String token, @RequestBody Todo entry) {
         repository.save(entry)
         return new ResponseEntity<Todo>(entry, HttpStatus.CREATED)
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/todo/{id}", method = RequestMethod.GET)
-    Todo findOne(@PathVariable String id) {
+    @VerifyJWT
+    Todo findOne(@RequestHeader("Authorization") String token, @PathVariable String id) {
         return repository.findOne(id)
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/todo", method = RequestMethod.PUT)
-    ResponseEntity<Todo> updateEntry(@RequestBody Todo entry) {
+    @VerifyJWT
+    ResponseEntity<Todo> updateEntry(@RequestHeader("Authorization") String token, @RequestBody Todo entry) {
         repository.save(entry)
         return new ResponseEntity<Todo>(entry, HttpStatus.OK)
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/todo/{id}", method = RequestMethod.DELETE)
-    ResponseEntity<Todo> deleteEntry(@PathVariable String id) {
+    @VerifyJWT
+    ResponseEntity<Todo> deleteEntry(@RequestHeader("Authorization") String token, @PathVariable String id) {
         repository.delete(id)
         return new ResponseEntity<Todo>(HttpStatus.OK)
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/todos/stats", method = RequestMethod.GET)
-    TodoStats getStatistics() {
+    @VerifyJWT
+    TodoStats getStatistics(@RequestHeader("Authorization") String token) {
         return todoProviderService.provideStatistics()
+    }
+
+    @RequestMapping(path = "/todos/test")
+    @VerifyJWT
+    String test(@RequestHeader("Authorization") String header) {
+        return header
     }
 }
