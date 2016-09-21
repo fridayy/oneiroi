@@ -9,3 +9,11 @@
 .panel {
     text-align: left!important;
 }
+
+.description {
+    padding: 2% 2% 2% 0%;
+}
+
+.date {
+    margin-right: 0.5em;
+}

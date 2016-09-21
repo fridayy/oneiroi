@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import LoginForm from './LoginForm';
 import SHA256 from 'crypto-js/sha256';
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Panel} from 'react-bootstrap';
 import {browserHistory} from 'react-router'
 import CloseableAlert from '../common/CloseableAlert';
 
@@ -15,7 +15,8 @@ class LoginPage extends Component {
             user: {
                 basic: {username: '', password: ''}
             },
-            alert: false
+            alert: false,
+            loggedIn: false
         };
         this.setUserState = this.setUserState.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,9 +38,6 @@ class LoginPage extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(JSON.stringify(
-            "username: " + this.state.user.basic.username +
-            " password: " + SHA256(this.state.user.basic.password)));
         this.sendLoginRequest()
     }
 
@@ -54,6 +52,7 @@ class LoginPage extends Component {
         }).then(this.handleErrors)
             .then(response => response.json())
             .then(data => {
+                this.setState({loggedIn: true});
                 this.addAuthToken(data);
             })
             .catch(err => this.setState({alert: true}));
@@ -71,12 +70,19 @@ class LoginPage extends Component {
         browserHistory.push('/todos');
     }
 
+    componentWillUpdate() {
+        if(this.state.loggedIn) {
+            browserHistory.push('/todos')
+        }
+    }
+
     render() {
         return (
             <Grid>
                 <Row className="show-grid">
                     <Col xs={6} md={4}></Col>
                     <Col xs={6} md={4}>
+                        <Panel>
                         <CloseableAlert visible={this.state.alert}
                                         alertType="danger"
                                         title="Ooops"
@@ -85,6 +91,7 @@ class LoginPage extends Component {
                             user={this.state.user}
                             onChange={this.setUserState}
                             onClick={this.handleSubmit}/>
+                        </Panel>
                     </Col>
                     <Col xsHidden md={4}></Col>
                 </Row>

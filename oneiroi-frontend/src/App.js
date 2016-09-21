@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './App.css';
 import Header from './components/header/Header';
-import Navigation from './components/navigation/Navigation';
 
 /**
  * This class is rendered everytime and serves as the application layout
@@ -12,7 +11,6 @@ class App extends Component {
         return (
             <div className="App">
                 <Header/>
-                <Navigation/>
                 {this.props.children}
             </div>
         );

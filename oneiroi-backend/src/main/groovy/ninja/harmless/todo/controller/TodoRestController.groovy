@@ -6,9 +6,13 @@ import ninja.harmless.todo.model.Todo
 import ninja.harmless.todo.model.TodoStats
 import ninja.harmless.todo.repository.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+
+import java.time.LocalDateTime
+
 /**
  * @author bnjm@harmless.ninja - 9/11/16.
  */
@@ -19,6 +23,8 @@ class TodoRestController {
 
     TodoProviderService todoProviderService
     TodoRepository repository
+    @Value('${secret}')
+    String secret
 
     @Autowired
     TodoRestController(TodoProviderService todoProviderService, TodoRepository repository) {
@@ -40,13 +46,14 @@ class TodoRestController {
     @RequestMapping(path = "/todo", method = RequestMethod.POST)
     @VerifyJWT
     ResponseEntity<Todo> createEntry(@RequestHeader("Authorization") String token, @RequestBody Todo entry) {
+        entry.created = LocalDateTime.now()
         repository.save(entry)
         return new ResponseEntity<Todo>(entry, HttpStatus.CREATED)
     }
 
-    @RequestMapping(path = "/todo/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/todo", method = RequestMethod.GET)
     @VerifyJWT
-    ResponseEntity<Todo> findOne(@RequestHeader("Authorization") String token, @PathVariable String id) {
+    ResponseEntity<Todo> findOne(@RequestHeader("Authorization") String token, @RequestParam(value = "id", required = true) String id) {
         return new ResponseEntity<Todo>(repository.findOne(id), HttpStatus.OK)
     }
 

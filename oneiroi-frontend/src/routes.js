@@ -1,10 +1,10 @@
 import React from 'react';
 import {Route, IndexRoute} from 'react-router';
 import App from './App';
-import HomePage from './components/home/HomePage'
 import LoginPage from './components/login/LoginPage';
 import TodoPage from './components/todo/TodoPage';
-
+import LogoutPage from './components/logout/LogoutPage';
+import UserManagementPage from './components/usermanagement/UserManagementPage';
 
 
 /**
@@ -13,9 +13,11 @@ import TodoPage from './components/todo/TodoPage';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={HomePage}/>
-        <Route path="login" component={LoginPage} />
-        <Route path="todos" component={TodoPage} />
-        <Route path="test" component={TodoPage} />
+        <IndexRoute component={LoginPage}/>
+        <Route path="login" component={LoginPage}/>
+        <Route path="todos" component={TodoPage}/>
+        <Route path="test" component={TodoPage}/>
+        <Route path="logout" component={LogoutPage}/>
+        <Route path="usermanagement" component={UserManagementPage}/>
     </Route>
 );

@@ -7,8 +7,9 @@ import TodoAddModal from './TodoAddModal';
 import TodoStatistic from './TodoStatistic';
 import {Grid, Row, Col, Panel} from 'react-bootstrap';
 import CloseableAlert from '../common/CloseableAlert';
-import './Todo.css';
+import './todo.css';
 import {browserHistory} from 'react-router'
+import Navigation from '../navigation/Navigation';
 
 class TodoPage extends Component {
     constructor(props) {
@@ -55,7 +56,7 @@ class TodoPage extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(this.state.todo)
         }).then(this.handleErrors)
@@ -66,14 +67,14 @@ class TodoPage extends Component {
                 this.setState({added: true});
                 this.queryStatisticsFromApi();
             })
-            .catch(err => this.setState({alert : true}));
+            .catch(err => this.setState({alert: true}));
     }
 
     queryTodosFromApi() {
         fetch("/api/v1/todos", {
             method: 'GET',
             headers: {
-                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             }
         }).then(this.handleErrors)
             .then(response => response.json())
@@ -85,13 +86,13 @@ class TodoPage extends Component {
         fetch("/api/v1/todo/" + id, {
             method: 'DELETE',
             headers: {
-                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             }
         }).then(this.handleErrors)
             .then(response => {
-            this.queryTodosFromApi();
-            this.queryStatisticsFromApi();
-        }).catch(err => this.redirect());
+                this.queryTodosFromApi();
+                this.queryStatisticsFromApi();
+            }).catch(err => this.redirect());
     }
 
     updateEntryStatus(todo) {
@@ -101,20 +102,20 @@ class TodoPage extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             },
             body: JSON.stringify(todo)
         }).then(this.handleErrors)
             .then(response => {
-            this.queryTodosFromApi();
-            this.queryStatisticsFromApi();
-        }).catch(err => this.redirect());
+                this.queryTodosFromApi();
+                this.queryStatisticsFromApi();
+            }).catch(err => this.redirect());
     }
 
     queryStatisticsFromApi() {
         fetch("/api/v1/todos/stats", {
             headers: {
-                'Authorization' : 'Bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             }
         })
             .then(this.handleErrors)
@@ -142,6 +143,8 @@ class TodoPage extends Component {
 
     render() {
         return (
+            <div>
+                <Navigation/>
             <Grid className="todoContainer">
                 <Row className="show-grid">
                     <Col xs={12} md={8}>
@@ -154,14 +157,12 @@ class TodoPage extends Component {
                                         title="Could not add Todo!"
                                         text="Sorry :("/>
                         <h4>Tasks</h4>
-                        <Panel>
                             <TodoList
                                 todos={this.state.todos}
                                 todo={this.state.todo}
                                 onDelete={this.deleteEntry}
                                 onUpdate={this.updateEntryStatus}
                             />
-                        </Panel>
                     </Col>
                     <Col className="todoStats" xs={6} md={4}>
                         <TodoStatistic
@@ -175,6 +176,7 @@ class TodoPage extends Component {
                     </Col>
                 </Row>
             </Grid>
+            </div>
         )
     }
 }

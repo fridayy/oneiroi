@@ -1,6 +1,6 @@
 package ninja.harmless.user
 
-import ninja.harmless.security.model.JwtToken
+import ninja.harmless.security.jwt.JsonWebToken
 import ninja.harmless.user.model.User
 /**
  * @author bnjm@harmless.ninja - 9/11/16.
@@ -11,5 +11,7 @@ interface UserService {
      * @param user
      * @return
      */
-    JwtToken auth(User user)
+    JsonWebToken auth(User user)
+    void logout(User user)
+    void logout(String token)
 }

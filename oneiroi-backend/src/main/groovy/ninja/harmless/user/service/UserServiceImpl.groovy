@@ -1,8 +1,8 @@
 package ninja.harmless.user.service
 
 import ninja.harmless.management.UserManagementService
-import ninja.harmless.security.JwtService
-import ninja.harmless.security.model.JwtToken
+import ninja.harmless.security.jwt.JsonWebToken
+import ninja.harmless.security.jwt.JwtService
 import ninja.harmless.user.UserService
 import ninja.harmless.user.exception.InvalidCredentialsException
 import ninja.harmless.user.model.User
@@ -20,24 +20,34 @@ class UserServiceImpl implements UserService {
 
     UserRepository userRepository
     UserManagementService userManagementService
-    JwtService jwtService
+    JwtService<User> jwtService
 
     @Autowired
-    UserServiceImpl(UserRepository userRepository, JwtService jwtService, UserManagementService userManagementService) {
+    UserServiceImpl(UserRepository userRepository, JwtService<User> jwtService, UserManagementService userManagementService) {
         this.userManagementService = userManagementService
         this.userRepository = userRepository
         this.jwtService = jwtService
     }
 
     @Override
-    JwtToken auth(User user) {
+    JsonWebToken auth(User user) {
         User u = userRepository.findByUsernameIgnoreCase(user.basic.username)
         if (u.basic.password.equals(user.basic.password)) {
             u.basic.lastLogin = LocalDateTime.now()
             userRepository.save(u)
             userManagementService.add(u)
-            return jwtService.generateJWT(u)
+            return jwtService.generateJWT(u, u.privileges.rights, "abc")
         }
         throw new InvalidCredentialsException("Wrong username / password")
+    }
+
+    @Override
+    void logout(User user) {
+        userManagementService.remove(user);
+    }
+
+    @Override
+    void logout(String token) {
+        userManagementService.removeByUsername(jwtService.getSubject(token))
     }
 }

@@ -24,6 +24,7 @@ jar {
 	baseName = 'oneiroi-backend'
 	version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -32,24 +33,27 @@ repositories {
 }
 
 
+
+
+
 dependencies {
+
+	compile project(':oneiroi-api')
+
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-web')
-
-	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.8.2'
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.2')
+	compile('io.jsonwebtoken:jjwt:0.7.0')
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
 // https://mvnrepository.com/artifact/org.spockframework/spock-core
 	compile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4-rc-2'
 // https://mvnrepository.com/artifact/org.spockframework/spock-spring
 	compile group: 'org.spockframework', name: 'spock-spring', version: '1.1-groovy-2.4-rc-2'
-
-	compile 'io.jsonwebtoken:jjwt:0.6.0'
 
 	compile('org.codehaus.groovy:groovy')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

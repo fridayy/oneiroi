@@ -7,6 +7,8 @@ import ninja.harmless.user.model.User
  */
 interface UserManagementService {
     void add(User user)
+    void removeByUsername(String username)
+    void remove(User user)
     Set<User> getActiveUser()
     void grantPrivilege(User user, String privilege)
     void revokePrivilege(User user, String privilege)

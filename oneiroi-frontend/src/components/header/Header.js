@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import FontAwesome from 'react-fontawesome';
 import {PageHeader} from 'react-bootstrap';
-/**
- * Stateless Header component
- * const indicates stateless components.
- */
+import {browserHistory} from 'react-router';
+import './header.css';
+
 class Header extends Component {
     render() {
         return (
-            <PageHeader>
+            <PageHeader onClick={() => browserHistory.push('/todos')}>
                 <FontAwesome
                     name="circle-o-notch"
                     size="4x"

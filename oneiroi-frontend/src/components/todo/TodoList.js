@@ -2,9 +2,9 @@
  * Created by bnjm on 9/11/16.
  */
 import React, {Component} from 'react';
-import {Table} from 'react-bootstrap';
+import {Panel} from 'react-bootstrap';
 import TodoItem from './TodoItem';
-import './Todo.css';
+import './todo.css'
 
 class TodoList extends Component {
 
@@ -20,20 +20,9 @@ class TodoList extends Component {
         };
 
         return (
-            <div>
-                <Table hover condensed striped>
-                    <thead>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Created</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                    </thead>
-                    <tbody>
-                    {this.props.todos.map(createTodoEntryRow, this)}
-                    </tbody>
-                </Table>
-            </div>
+            <Panel>
+                {this.props.todos.map(createTodoEntryRow, this)}
+            </Panel>
         )
     }
 }

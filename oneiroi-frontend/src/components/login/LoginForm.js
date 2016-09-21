@@ -8,6 +8,7 @@ class LoginForm extends Component {
     render() {
         return(
             <form>
+                <h4>Login:</h4>
                 <TextInputValidation label="" type="text" name="username" placeholder="Username" minLength={5} onChange={this.props.onChange} value={this.props.user.username}/>
                 <TextInputValidation label="" type="password" name="password" placeholder="Password" minLength={5} onChange={this.props.onChange} value={this.props.user.password}/>
                 <input type="submit" value="Submit" onClick={this.props.onClick}/>

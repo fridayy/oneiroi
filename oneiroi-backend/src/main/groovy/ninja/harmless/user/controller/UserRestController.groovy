@@ -1,6 +1,6 @@
 package ninja.harmless.user.controller
 
-import ninja.harmless.security.model.JwtToken
+import ninja.harmless.security.jwt.JsonWebToken
 import ninja.harmless.user.UserService
 import ninja.harmless.user.model.BasicUserInformation
 import ninja.harmless.user.model.User
@@ -51,15 +51,21 @@ class UserRestController {
 
 
     @RequestMapping(path = "/user/login", method = RequestMethod.POST)
-    ResponseEntity<JwtToken> loginUser(@RequestBody User user) {
-        JwtToken token = userService.auth(user)
-        return new ResponseEntity<JwtToken>(token, HttpStatus.ACCEPTED)
+    ResponseEntity<JsonWebToken> loginUser(@RequestBody User user) {
+        JsonWebToken token = userService.auth(user)
+        return new ResponseEntity<JsonWebToken>(token, HttpStatus.ACCEPTED)
+    }
+
+    @RequestMapping(path = "/user/logout", method = RequestMethod.GET)
+    ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token) {
+        userService.logout(token.split(" ")[1])
+        return new ResponseEntity<Object>(HttpStatus.OK)
     }
 
     @RequestMapping(path = "/user/create", method = RequestMethod.GET)
     ResponseEntity<User> createMock() {
         User u = new User(basic:
-                            new BasicUserInformation(username: "bnjm", password: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"),
+                            new BasicUserInformation(username: "test", password: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"),
                          privileges:
                             new UserRights(rights: ["admin" : true])
         )
