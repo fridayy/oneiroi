@@ -16,10 +16,11 @@ class LoginPage extends Component {
                 basic: {username: '', password: ''}
             },
             alert: false,
-            loggedIn: false
+            loggedIn: true
         };
         this.setUserState = this.setUserState.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        console.log("Login component constructor called.")
     }
 
     setUserState(e) {
@@ -52,7 +53,6 @@ class LoginPage extends Component {
         }).then(this.handleErrors)
             .then(response => response.json())
             .then(data => {
-                this.setState({loggedIn: true});
                 this.addAuthToken(data);
             })
             .catch(err => this.setState({alert: true}));
@@ -67,13 +67,8 @@ class LoginPage extends Component {
 
     addAuthToken(data) {
         localStorage.setItem("token", data.header + "." + data.payload + "." + data.signature);
+        this.setState({loggedIn: true});
         browserHistory.push('/todos');
-    }
-
-    componentWillUpdate() {
-        if(this.state.loggedIn) {
-            browserHistory.push('/todos')
-        }
     }
 
     render() {

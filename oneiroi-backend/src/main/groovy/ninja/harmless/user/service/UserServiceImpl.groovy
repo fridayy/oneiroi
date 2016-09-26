@@ -7,11 +7,11 @@ import ninja.harmless.user.UserService
 import ninja.harmless.user.exception.InvalidCredentialsException
 import ninja.harmless.user.model.User
 import ninja.harmless.user.repository.UserRepository
+import ninja.harmless.user.security.SecretProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 import java.time.LocalDateTime
-
 /**
  * @author bnjm@harmless.ninja - 9/12/16.
  */
@@ -21,12 +21,14 @@ class UserServiceImpl implements UserService {
     UserRepository userRepository
     UserManagementService userManagementService
     JwtService<User> jwtService
+    SecretProvider secretProvider
 
     @Autowired
-    UserServiceImpl(UserRepository userRepository, JwtService<User> jwtService, UserManagementService userManagementService) {
+    UserServiceImpl(UserRepository userRepository, JwtService<User> jwtService, UserManagementService userManagementService, SecretProvider secretProvider) {
         this.userManagementService = userManagementService
         this.userRepository = userRepository
         this.jwtService = jwtService
+        this.secretProvider = secretProvider
     }
 
     @Override
@@ -36,7 +38,7 @@ class UserServiceImpl implements UserService {
             u.basic.lastLogin = LocalDateTime.now()
             userRepository.save(u)
             userManagementService.add(u)
-            return jwtService.generateJWT(u, u.privileges.rights, "abc")
+            return jwtService.generateJWT(u, u.privileges.rights, secretProvider.getSecret())
         }
         throw new InvalidCredentialsException("Wrong username / password")
     }
@@ -48,6 +50,6 @@ class UserServiceImpl implements UserService {
 
     @Override
     void logout(String token) {
-        userManagementService.removeByUsername(jwtService.getSubject(token))
+        userManagementService.removeByUsername(jwtService.getSubject(token, secretProvider.getSecret()))
     }
 }

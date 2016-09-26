@@ -1,9 +1,11 @@
 package ninja.harmless.security.service
 
-import ninja.harmless.security.JwtService
+import ninja.harmless.security.jwt.JwtService
+import ninja.harmless.security.jwt.JwtServiceImpl
 import ninja.harmless.user.model.BasicUserInformation
 import ninja.harmless.user.model.User
 import spock.lang.Specification
+
 /**
  * @author bnjm@harmless.ninja - 9/14/16.
  */

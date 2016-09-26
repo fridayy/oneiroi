@@ -8,7 +8,7 @@ class TodoProgressBar extends Component {
         return(
             <ProgressBar
                 active
-                now={(Number.parseInt(this.props.todoStats.percentageDone, 10)).toFixed(2)}
+                now={(Number.parseInt(this.props.todoStats.percentageDone, 10))}
                 label={`${this.props.todoStats.percentageDone}% done`}
             />
         )

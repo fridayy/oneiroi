@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import TodoList from './TodoList';
 import TodoAddModal from './TodoAddModal';
 import TodoStatistic from './TodoStatistic';
-import {Grid, Row, Col, Panel} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 import CloseableAlert from '../common/CloseableAlert';
 import './todo.css';
 import {browserHistory} from 'react-router'

@@ -12,6 +12,7 @@ class TodoList extends Component {
         var createTodoEntryRow = function (todo) {
             return (
                 <TodoItem
+                    key={todo.id}
                     todo={todo}
                     onDelete={this.props.onDelete}
                     onUpdate={this.props.onUpdate}

@@ -7,7 +7,7 @@ import './header.css';
 class Header extends Component {
     render() {
         return (
-            <PageHeader onClick={() => browserHistory.push('/todos')}>
+            <PageHeader onClick={() => browserHistory.push('/')}>
                 <FontAwesome
                     name="circle-o-notch"
                     size="4x"
