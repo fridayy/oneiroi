@@ -156,7 +156,7 @@ class TodoPage extends Component {
                                         alertType="danger"
                                         title="Could not add Todo!"
                                         text="Sorry :("/>
-                        <h4>Tasks</h4>
+                        <h4>Open Tasks</h4>
                             <TodoList
                                 todos={this.state.todos}
                                 todo={this.state.todo}

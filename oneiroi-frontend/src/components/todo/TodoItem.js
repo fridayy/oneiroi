@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import {Button, OverlayTrigger, Tooltip, Panel} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import './todo.css';
+import ReactEmoji from 'react-emoji';
 
 class TodoItem extends Component {
 
@@ -21,7 +22,7 @@ class TodoItem extends Component {
                         </div>;
 
 
-        const header = <div>{this.props.todo.title}
+        const header = <div>{ReactEmoji.emojify(this.props.todo.title)}
             <Button className="close" onClick={() => this.props.onDelete(this.props.todo.id)}>
                 <FontAwesome
                     name="times"
@@ -33,7 +34,7 @@ class TodoItem extends Component {
             <Panel header={header} key={this.props.todo.id} bsStyle={bsStatus} footer={footer}>
                 <OverlayTrigger placement="top" overlay={tooltip}>
                     <p className="description"
-                       onClick={() => this.props.onUpdate(this.props.todo)}>{this.props.todo.description}</p>
+                       onClick={() => this.props.onUpdate(this.props.todo)}>{ReactEmoji.emojify(this.props.todo.description)}</p>
                 </OverlayTrigger>
             </Panel>
         )

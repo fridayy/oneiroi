@@ -21,9 +21,19 @@ class TodoList extends Component {
         };
 
         return (
-            <Panel>
-                {this.props.todos.map(createTodoEntryRow, this)}
-            </Panel>
+            <div>
+                <Panel>
+                    {this.props.todos.filter(function (item, i) {
+                        return !item.isDone;
+                    }).map(createTodoEntryRow, this)}
+                </Panel>
+                <h4>Closed Tasks</h4>
+                <Panel>
+                    {this.props.todos.filter(function (item, i) {
+                        return item.isDone;
+                    }).map(createTodoEntryRow, this)}
+                    </Panel>
+            </div>
         )
     }
 }

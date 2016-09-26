@@ -15,12 +15,12 @@ import java.util.concurrent.ConcurrentHashMap
 class UserManagementServiceImpl implements UserManagementService {
 
     UserRepository userRepository
+    private Set<User> activeUsers = Collections.newSetFromMap(new ConcurrentHashMap<>())
 
     @Autowired
     UserManagementServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository
     }
-    private Set<User> activeUsers = Collections.newSetFromMap(new ConcurrentHashMap<>())
 
     @Override
     void add(User user) {
