@@ -51,6 +51,12 @@ public class JwtServiceImpl<T> implements JwtService<T> {
     }
 
     @Override
+    public boolean verifyJWT(String token, String secret, String claim) {
+        return false;
+    }
+
+
+    @Override
     public String getSubject(String token, String secret) {
         String subject = "";
         try {

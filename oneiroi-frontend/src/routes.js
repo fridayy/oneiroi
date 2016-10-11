@@ -13,10 +13,9 @@ import UserManagementPage from './components/usermanagement/UserManagementPage';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={LoginPage}/>
+        <IndexRoute component={TodoPage}/>
         <Route path="login" component={LoginPage}/>
         <Route path="todos" component={TodoPage}/>
-        <Route path="test" component={TodoPage}/>
         <Route path="logout" component={LogoutPage}/>
         <Route path="usermanagement" component={UserManagementPage}/>
     </Route>

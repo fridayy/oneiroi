@@ -9,5 +9,6 @@ public interface JwtService<T> {
     JsonWebToken generateJWT(T user, Map<String, Object> publicClaims, String secret);
     boolean verifyJWT(JsonWebToken token, String secret);
     boolean verifyJWT(String token, String secret);
+    boolean verifyJWT(String token, String secret, String claim);
     String getSubject(String token, String secret);
 }
