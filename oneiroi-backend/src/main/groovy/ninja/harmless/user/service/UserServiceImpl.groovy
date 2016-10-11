@@ -1,5 +1,6 @@
 package ninja.harmless.user.service
 
+import ch.qos.logback.classic.Logger
 import ninja.harmless.management.UserManagementService
 import ninja.harmless.security.jwt.JsonWebToken
 import ninja.harmless.security.jwt.JwtService
@@ -8,6 +9,7 @@ import ninja.harmless.user.exception.InvalidCredentialsException
 import ninja.harmless.user.model.User
 import ninja.harmless.user.repository.UserRepository
 import ninja.harmless.user.security.SecretProvider
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -22,6 +24,8 @@ class UserServiceImpl implements UserService {
     UserManagementService userManagementService
     JwtService<User> jwtService
     SecretProvider secretProvider
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass())
 
     @Autowired
     UserServiceImpl(UserRepository userRepository, JwtService<User> jwtService, UserManagementService userManagementService, SecretProvider secretProvider) {
@@ -40,6 +44,7 @@ class UserServiceImpl implements UserService {
             userManagementService.add(u)
             return jwtService.generateJWT(u, u.privileges.rights, secretProvider.getSecret())
         }
+        logger.error("Wrong username: {} / password: {}", user.basic.username, user.basic.password)
         throw new InvalidCredentialsException("Wrong username / password")
     }
 

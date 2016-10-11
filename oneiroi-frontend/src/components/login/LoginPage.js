@@ -20,7 +20,6 @@ class LoginPage extends Component {
         };
         this.setUserState = this.setUserState.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        console.log("Login component constructor called.")
     }
 
     setUserState(e) {

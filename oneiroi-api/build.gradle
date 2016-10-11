@@ -1,0 +1,41 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.0.RELEASE'
+        aspectjVersion = '1.8.4'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://maven.eveoh.nl/content/repositories/releases"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("nl.eveoh:gradle-aspectj:1.6")
+    }
+}
+
+apply plugin: 'aspectj'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+
+bootRepackage.enabled = false
+bootRun.enabled = false
+findMainClass.enabled = false
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compileOnly('org.springframework.boot:spring-boot-starter-aop')
+    compileOnly('org.springframework.boot:spring-boot-starter-web')
+    compileOnly('io.jsonwebtoken:jjwt:0.7.0')
+    compileOnly('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.2')
+    compileOnly('org.apache.commons:commons-lang3:3.4')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}

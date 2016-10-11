@@ -2,6 +2,8 @@ package ninja.harmless.management.service
 
 import ninja.harmless.management.InactivePurgeService
 import ninja.harmless.management.UserManagementService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -14,6 +16,7 @@ import java.time.LocalDateTime
 class InactivePurgeServiceImpl implements InactivePurgeService {
 
     UserManagementService userManagementService
+    private final Logger logger = LoggerFactory.getLogger(this.class)
 
     @Autowired
     InactivePurgeServiceImpl(UserManagementService userManagementService) {
@@ -21,7 +24,7 @@ class InactivePurgeServiceImpl implements InactivePurgeService {
     }
 
     @Override
-    @Scheduled(fixedDelay = 500000L)
+    @Scheduled(fixedDelay = 50000L)
     int purge() {
         int removedCounter = 0
         userManagementService.getActiveUser().each {
@@ -31,6 +34,7 @@ class InactivePurgeServiceImpl implements InactivePurgeService {
                 removedCounter++
             }
         }
+        logger.debug("Purged {}", removedCounter)
         return removedCounter
     }
 }

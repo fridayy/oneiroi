@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping(path = "/api/v1/")
 @CrossOrigin(origins = "http://localhost:3000")
 class UserRestController {
-
     UserRepository userRepository
     UserService userService
 
@@ -72,5 +71,4 @@ class UserRestController {
         userRepository.save(u)
         return new ResponseEntity<User>(u, HttpStatus.ACCEPTED)
     }
-
 }
